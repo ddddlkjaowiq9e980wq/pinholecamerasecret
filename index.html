@@ -1,0 +1,434 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PINHOLE — 아날로그 카메라 연구소</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Pretendard:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #f5f0e7;
+  --paper: #fffdf8;
+  --brown: #806044;
+  --dark: #33291f;
+  --muted: #998b7c;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--dark);
+  font-family: 'Pretendard', sans-serif;
+  overflow-x: hidden;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 20px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(245,240,231,.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(128,96,68,.12);
+}
+
+.logo {
+  font-family: 'Gowun Batang', serif;
+  font-size: 23px;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+nav {
+  display: flex;
+  gap: 28px;
+}
+
+nav a {
+  color: var(--dark);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color .3s;
+}
+
+nav a:hover {
+  color: #b27b48;
+}
+
+.hero {
+  min-height: 95vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 130px 20px 80px;
+  background:
+    linear-gradient(rgba(36,28,20,.35),rgba(36,28,20,.45)),
+    url('https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=1800')
+    center/cover;
+  color: white;
+}
+
+.hero-content {
+  max-width: 750px;
+  animation: fadeUp 1.2s ease both;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 5px;
+  margin-bottom: 25px;
+}
+
+.hero h1 {
+  font-family: 'Gowun Batang', serif;
+  font-size: clamp(42px, 8vw, 82px);
+  line-height: 1.3;
+  margin-bottom: 25px;
+}
+
+.hero p {
+  line-height: 2;
+  font-size: 15px;
+  opacity: .9;
+}
+
+.button {
+  display: inline-block;
+  margin-top: 35px;
+  padding: 15px 32px;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 50px;
+  color: white;
+  text-decoration: none;
+  transition: .35s;
+}
+
+.button:hover {
+  background: white;
+  color: var(--dark);
+  transform: translateY(-4px);
+}
+
+section {
+  padding: 110px 8%;
+}
+
+.section-label {
+  color: var(--brown);
+  font-size: 11px;
+  letter-spacing: 4px;
+  margin-bottom: 17px;
+}
+
+.section-title {
+  font-family: 'Gowun Batang', serif;
+  font-size: clamp(30px, 5vw, 45px);
+  margin-bottom: 20px;
+}
+
+.description {
+  color: var(--muted);
+  line-height: 2;
+  max-width: 600px;
+  font-size: 14px;
+}
+
+.intro {
+  text-align: center;
+}
+
+.intro .description {
+  margin: auto;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 22px;
+  margin-top: 55px;
+}
+
+.card {
+  background: var(--paper);
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform .5s, box-shadow .5s;
+}
+
+.card:hover {
+  transform: translateY(-9px);
+  box-shadow: 0 20px 45px rgba(65,45,25,.1);
+}
+
+.card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  transition: transform .8s;
+}
+
+.card:hover img {
+  transform: scale(1.06);
+}
+
+.card-content {
+  padding: 25px;
+}
+
+.card h3 {
+  font-family: 'Gowun Batang', serif;
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+.card p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.guide {
+  background: #eae1d4;
+}
+
+.steps {
+  margin-top: 45px;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 18px;
+}
+
+.step {
+  background: rgba(255,253,248,.8);
+  padding: 28px;
+  border-radius: 12px;
+  transition: .4s;
+}
+
+.step:hover {
+  transform: translateX(7px);
+}
+
+.number {
+  font-family: 'Gowun Batang', serif;
+  color: #b28a62;
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.step h3 {
+  margin-bottom: 10px;
+}
+
+.step p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.quote {
+  text-align: center;
+  padding: 130px 20px;
+  background: #45382d;
+  color: #f5eadb;
+}
+
+.quote h2 {
+  font-family: 'Gowun Batang', serif;
+  font-size: clamp(25px,5vw,42px);
+  line-height: 1.7;
+}
+
+.quote p {
+  margin-top: 25px;
+  color: #c7b7a5;
+  font-size: 13px;
+}
+
+footer {
+  padding: 45px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 2;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity .9s ease, transform .9s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(35px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media(max-width:750px) {
+  header { padding: 17px 5%; }
+  nav { gap: 12px; }
+  nav a { font-size: 11px; }
+  .logo { font-size: 17px; }
+  section { padding: 80px 6%; }
+  .cards { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">PINHOLE.</div>
+  <nav>
+    <a href="#intro">소개</a>
+    <a href="#guide">제작법</a>
+    <a href="#gallery">사진 이야기</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="hero">
+  <div class="hero-content">
+    <div class="eyebrow">ANALOG PHOTOGRAPHY LAB</div>
+    <h1>작은 구멍으로<br>기록하는 세상</h1>
+    <p>
+      성냥갑 하나, 작은 구멍 하나.<br>
+      그리고 그 안에 담기는 특별한 순간.
+    </p>
+    <a href="#intro" class="button">연구소 둘러보기 →</a>
+  </div>
+</div>
+
+<section class="intro reveal" id="intro">
+  <div class="section-label">ABOUT PINHOLE</div>
+  <h2 class="section-title">아날로그의 작은 시작</h2>
+  <p class="description">
+    핀홀 카메라는 렌즈 대신 작은 구멍을 통해 빛을 받아들이는
+    아주 특별한 카메라입니다. 복잡한 기술 없이도 빛과 시간의
+    흔적을 사진으로 남길 수 있습니다.
+  </p>
+</section>
+
+<section id="gallery" class="reveal">
+  <div class="section-label">THE ANALOG WORLD</div>
+  <h2 class="section-title">사진의 세계</h2>
+
+  <div class="cards">
+    <article class="card">
+      <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800" alt="필름 카메라">
+      <div class="card-content">
+        <h3>필름 카메라</h3>
+        <p>빛을 필름에 기록하는 오래된 방식. 기다림마저 사진의 일부입니다.</p>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800" alt="아날로그 사진">
+      <div class="card-content">
+        <h3>빛의 흔적</h3>
+        <p>작은 구멍을 지나온 빛이 만들어 내는 독특한 이미지.</p>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=800" alt="풍경 사진">
+      <div class="card-content">
+        <h3>기록하는 순간</h3>
+        <p>평범한 풍경도 필름 속에서는 특별한 기억이 됩니다.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="guide reveal" id="guide">
+  <div class="section-label">DIY CAMERA GUIDE</div>
+  <h2 class="section-title">성냥갑 핀홀 카메라 만들기</h2>
+  <p class="description">
+    주변에서 쉽게 구할 수 있는 재료로 직접 카메라를 만들어 보세요.
+  </p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="number">01</div>
+      <h3>재료 준비</h3>
+      <p>성냥갑, 검은 종이, 알루미늄 포일, 테이프, 필름을 준비합니다.</p>
+    </div>
+
+    <div class="step">
+      <div class="number">02</div>
+      <h3>카메라 상자 제작</h3>
+      <p>상자 내부를 검게 처리하고 빛이 새어 들어오지 않도록 막습니다.</p>
+    </div>
+
+    <div class="step">
+      <div class="number">03</div>
+      <h3>핀홀 만들기</h3>
+      <p>얇은 금속 포일에 아주 작은 구멍을 내고 카메라 앞면에 고정합니다.</p>
+    </div>
+
+    <div class="step">
+      <div class="number">04</div>
+      <h3>촬영하기</h3>
+      <p>완전히 어두운 곳에서 필름을 장착하고 노출 시간을 테스트합니다.</p>
+    </div>
+  </div>
+</section>
+
+<div class="quote reveal">
+  <h2>
+    사진은 빛으로 쓰는<br>
+    가장 조용한 일기입니다.
+  </h2>
+  <p>PINHOLE CAMERA SECRET · EST. 2026</p>
+</div>
+
+</main>
+
+<footer>
+  <div class="logo">PINHOLE.</div>
+  <p>작은 구멍으로 바라보는 커다란 세상.</p>
+  <p>© 2026 PINHOLE CAMERA SECRET</p>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => {
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>
